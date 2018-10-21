@@ -11,7 +11,7 @@ class LocationService {
       position.longitude,
     );
 
-    return new Location(
+    return Location(
       position.latitude,
       position.longitude,
       placemark.first.subLocality ?? placemark.first.locality,

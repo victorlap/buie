@@ -10,12 +10,12 @@ class RainList {
 
   factory RainList.fromBuienradarResponse(
       List<String> entries, Location location) {
-    List<Rain> list = entries
+    final List<Rain> list = entries
         .where((entry) => entry != '')
         .map((String entry) => Rain.fromBuienradarResponse(entry))
         .toList();
 
-    return new RainList(
+    return RainList(
       list: list,
       start: list.first.time,
       end: list.last.time,
@@ -31,14 +31,14 @@ class Rain {
   Rain(this.time, this.rain);
 
   factory Rain.fromBuienradarResponse(String entry) {
-    String minute = entry.substring(4, 6);
-    String second = entry.substring(7);
-    String rain = entry.substring(0, 3);
+    final String minute = entry.substring(4, 6);
+    final String second = entry.substring(7);
+    final String rain = entry.substring(0, 3);
 
-    DateTime now = DateTime.now();
-    DateTime dt = new DateTime(
+    final DateTime now = DateTime.now();
+    final DateTime dt = DateTime(
         now.year, now.month, now.day, int.parse(minute), int.parse(second));
 
-    return new Rain(dt, double.parse(rain));
+    return Rain(dt, double.parse(rain));
   }
 }

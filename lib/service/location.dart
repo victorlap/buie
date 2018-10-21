@@ -6,10 +6,15 @@ class LocationService {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
+    List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+
     return new Location(
       position.latitude,
       position.longitude,
-      position.toString(),
+      placemark.first.subLocality ?? placemark.first.locality,
     );
   }
 }

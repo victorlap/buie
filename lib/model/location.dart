@@ -1,7 +1,7 @@
 class Location {
   final double lat;
-  final double long;
+  final double lon;
   final String name;
 
-  Location(this.lat, this.long, this.name);
+  Location(this.lat, this.lon, this.name);
 }

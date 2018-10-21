@@ -1,5 +1,7 @@
 import 'package:buie/model/location.dart';
+import 'package:buie/model/rain.dart';
 import 'package:buie/service/location.dart';
+import 'package:buie/service/rain.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -8,13 +10,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  Location _location;
-
-  void _refreshLocation() {
-    LocationService().currentLocation().then((Location _loc) {
-      _location = _loc;
-    });
-  }
+  Location _location = new Location(.0, .0, 'Unknown');
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +29,29 @@ class _MainScreenState extends State<MainScreen> {
               _location.name,
               style: Theme.of(context).textTheme.display1,
             ),
+            FutureBuilder<RainList>(
+              future: _fetchRain(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data.location.name);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+
+                return CircularProgressIndicator();
+              },
+            ),
           ],
         ),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _refreshLocation,
-        tooltip: 'Refresh',
-        child: new Icon(Icons.refresh),
-      ),
     );
+  }
+
+  Future<RainList> _fetchRain() async {
+    Location loc = await LocationService().currentLocation();
+    setState(() {
+      this._location = loc;
+    });
+    return RainService().getRainListForLocation(loc);
   }
 }
